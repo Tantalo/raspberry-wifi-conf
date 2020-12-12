@@ -34,7 +34,7 @@ async.series([
     // 2. Check if wifi is enabled / connected
     function test_is_wifi_enabled(next_step) {
         wifi_manager.is_wifi_enabled(function(error, result_ip) {
-			
+
             if (result_ip) {
                 console.log("\nWifi is enabled.");
                 var reconfigure = config.access_point.force_reconfigure || false;
@@ -49,9 +49,10 @@ async.series([
             next_step(error);
         });
     },
-    
+
     // 3. Turn RPI into an access point
     function enable_rpi_ap(next_step) {
+        console.log("AP ssid: " + config.access_point.ssid);
         wifi_manager.enable_ap_mode(config.access_point.ssid, function(error) {
             if(error) {
                 console.log("... AP Enable ERROR: " + error);
@@ -70,7 +71,7 @@ async.series([
         console.log("\nHTTP server running...");
         require("./app/api.js")(wifi_manager, next_step);
     },
-    
+
 
 ], function(error) {
     if (error) {
